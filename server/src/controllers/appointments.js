@@ -1,6 +1,6 @@
 import { pool, query } from '../db/pool.js';
 import { ApiError } from '../middleware/errors.js';
-import { appointmentSchema, appointmentFilters, statusSchema, idParam } from '../validators/schemas.js';
+import { appointmentSchema, appointmentFilters, statusSchema, parseId } from '../validators/schemas.js';
 import { toMinutes, weekdayOf } from '../utils/dates.js';
 
 const SELECT = `
@@ -16,7 +16,7 @@ const joined = (writeSql) => `
     FROM w JOIN doctors d ON d.id = w.doctor_id`;
 
 async function findAppointment(id, db = pool) {
-  const { rows } = await db.query(`${SELECT} WHERE a.id = $1`, [idParam.parse(id)]);
+  const { rows } = await db.query(`${SELECT} WHERE a.id = $1`, [parseId(id)]);
   if (!rows[0]) throw new ApiError(404, 'Appointment not found');
   return rows[0];
 }
@@ -137,7 +137,7 @@ export async function createAppointment(req, res) {
 }
 
 export async function updateAppointment(req, res) {
-  const id = idParam.parse(req.params.id);
+  const id = parseId(req.params.id);
   const a = appointmentSchema.parse(req.body);
   const updated = await withDoctorLock(a.doctor_id, async (db) => {
     await assertBookable(db, a, id);
@@ -153,7 +153,7 @@ export async function updateAppointment(req, res) {
 
 // PATCH /api/appointments/:id/status — quick status change from the list
 export async function updateStatus(req, res) {
-  const id = idParam.parse(req.params.id);
+  const id = parseId(req.params.id);
   const { status } = statusSchema.parse(req.body);
 
   // Fast path (one round trip): moving to completed/cancelled, or between pending <-> confirmed, never takes a
@@ -177,7 +177,7 @@ export async function updateStatus(req, res) {
 }
 
 export async function deleteAppointment(req, res) {
-  const { rows } = await query(`DELETE FROM appointments WHERE id = $1 RETURNING id`, [idParam.parse(req.params.id)]);
+  const { rows } = await query(`DELETE FROM appointments WHERE id = $1 RETURNING id`, [parseId(req.params.id)]);
   if (!rows[0]) throw new ApiError(404, 'Appointment not found');
   res.json({ data: { id: rows[0].id }, message: 'Appointment deleted' });
 }

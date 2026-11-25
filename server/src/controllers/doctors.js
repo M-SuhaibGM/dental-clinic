@@ -1,13 +1,13 @@
 import { query } from '../db/pool.js';
 import { ApiError } from '../middleware/errors.js';
-import { doctorSchema, doctorFilters, idParam } from '../validators/schemas.js';
+import { doctorSchema, doctorFilters, parseId } from '../validators/schemas.js';
 import { toISODate } from '../utils/dates.js';
 
 const values = (d) => [d.name, d.specialization, d.email, d.phone, d.available_days, d.start_time, d.end_time, d.is_active];
 const today = () => toISODate(new Date());
 
 async function findDoctor(id) {
-  const { rows } = await query(`SELECT * FROM doctors WHERE id = $1`, [idParam.parse(id)]);
+  const { rows } = await query(`SELECT * FROM doctors WHERE id = $1`, [parseId(id)]);
   if (!rows[0]) throw new ApiError(404, 'Doctor not found');
   return rows[0];
 }
@@ -48,7 +48,7 @@ export async function getDoctor(req, res) {
                 WHERE doctor_id = d.id AND appointment_date >= $2
                 ORDER BY appointment_date, start_time LIMIT 20) x), '[]'::json) AS appointments
        FROM doctors d WHERE d.id = $1`,
-    [idParam.parse(req.params.id), today()],
+    [parseId(req.params.id), today()],
   );
   if (!rows[0]) throw new ApiError(404, 'Doctor not found');
   res.json({ data: rows[0] });
@@ -65,7 +65,7 @@ export async function createDoctor(req, res) {
 }
 
 export async function updateDoctor(req, res) {
-  const id = idParam.parse(req.params.id);
+  const id = parseId(req.params.id);
   const d = doctorSchema.parse(req.body);
   const { rows } = await query(
     `UPDATE doctors SET name=$1, specialization=$2, email=$3, phone=$4, available_days=$5,
@@ -78,7 +78,7 @@ export async function updateDoctor(req, res) {
 }
 
 export async function deleteDoctor(req, res) {
-  const id = idParam.parse(req.params.id);
+  const id = parseId(req.params.id);
   // Happy path is a single statement; only when nothing was deleted do we look up why.
   const { rows } = await query(
     `DELETE FROM doctors d WHERE d.id = $1

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ApiError } from '../middleware/errors.js';
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 export const STATUSES = ['pending', 'confirmed', 'completed', 'cancelled'];
@@ -81,3 +82,10 @@ export const appointmentFilters = z.object({
 });
 
 export const idParam = z.coerce.number({ error: 'Invalid id' }).int('Invalid id').positive('Invalid id');
+
+/** Parses a route id; a bad value is a 400 that names the field (`id`), not a generic body error. */
+export function parseId(value) {
+  const result = idParam.safeParse(value);
+  if (!result.success) throw new ApiError(400, 'Invalid id', { id: 'Must be a positive whole number' });
+  return result.data;
+}
