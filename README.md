@@ -46,8 +46,8 @@ dental-clinic/
 │       ├── middleware/        # ApiError + centralized error handler
 │       ├── db/                # pool, schema.sql, migrate, seed, mockData (seed only)
 │       └── utils/
-├── render.yaml                # Render Blueprint (web service + Postgres)
-└── docs/                      # Project document + screenshots
+├── server/test/               # Unit tests (node:test): validation rules + date helpers
+└── render.yaml                # Render Blueprint (web service + Postgres)
 ```
 
 ## Running locally
@@ -78,6 +78,8 @@ npm run dev
 On first start the server **creates the tables and seeds mock data** (6 doctors, 16 appointments dated relative to today). To start fresh at any time, run `npm run db:reset`.
 
 You can also run each side on its own: `cd server && npm run dev`, then `cd client && npm run dev`.
+
+Run the unit tests with `npm test --prefix server` (no database needed).
 
 ## Environment variables
 
@@ -211,7 +213,8 @@ Tables and seed data are created on first boot. Free Render services sleep after
 ## Testing
 
 - **API:** tested with `curl` for every endpoint, covering validation errors (400), not-found (404), duplicate email (409), overlapping slot (409), outside working hours, wrong weekday, inactive doctor, invalid doctor reference, deleting a doctor with appointments (409), reactivating a cancelled appointment into a taken slot (409) and malformed JSON (400).
-- **UI end-to-end:** a Playwright script (`docs/e2e.py`) runs the full doctor and appointment CRUD through the browser, including client and server error display, delete confirmations, filters, the 404 page and mobile layout, and checks for zero console errors.
+- **Unit tests:** `npm test --prefix server` runs the `node:test` suite for the Zod validation rules (names, phone, email, working hours, durations, statuses), id parsing and the date helpers.
+- **Manual UI checks:** every doctor and appointment create / edit / delete from the browser, client-side and server-side error display, delete confirmations, filters and URL deep links, the 404 page, loading/empty/error states, and the mobile layout (drawer + card tables).
 
 ## Known limitations
 
