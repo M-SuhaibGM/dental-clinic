@@ -90,7 +90,7 @@ export default function Appointments() {
 
   const columns = [
     { key: 'when', label: 'Date & time', render: (a) => (
-      <div className="stack"><strong>{formatDate(a.appointment_date)}</strong><span className="muted">{formatTime(a.start_time)} · {a.duration_minutes} min</span></div>) },
+      <div className="stack"><strong>{formatDate(a.appointment_date)}</strong><span className="muted mono">{formatTime(a.start_time)} · {a.duration_minutes} min</span></div>) },
     { key: 'patient', label: 'Patient', render: (a) => (
       <div className="person"><Avatar name={a.patient_name} />
         <div className="stack"><strong>{a.patient_name}</strong><span className="muted">{a.patient_phone}</span></div></div>) },
@@ -118,8 +118,8 @@ export default function Appointments() {
       <div className={`card ${loading && appointments ? 'refreshing' : ''}`}>
         <div className="toolbar">
           <label className="search">
-            <Icon name="search" size={18} />
-            <input type="search" placeholder="Search patient, phone, reason…" value={search}
+            <Icon name="search" />
+            <input type="search" placeholder="Search" value={search}
               onChange={(e) => setSearch(e.target.value)} aria-label="Search appointments" />
           </label>
           <select value={filters.status} onChange={(e) => setFilter('status', e.target.value)} aria-label="Filter by status">
@@ -133,13 +133,13 @@ export default function Appointments() {
           <input type="date" value={filters.date} onChange={(e) => setFilter('date', e.target.value)} aria-label="Filter by date" />
           {hasFilters && <Button variant="ghost" size="sm" onClick={clearFilters}>Clear</Button>}
         </div>
-        {filters.from && <p className="filter-note">Showing appointments from {formatDate(filters.from)} onward.</p>}
+        {filters.from && <p className="filter-note">Showing appointments from {formatDate(filters.from)} onward</p>}
 
         <AsyncView loading={loading && !appointments} error={error} onRetry={reload} isEmpty={appointments?.length === 0}
           empty={hasFilters
-            ? <EmptyState title="No matching appointments" message="Try changing the filters."
+            ? <EmptyState title="No matching appointments" message="Try changing the filters"
                 action={<Button variant="secondary" onClick={clearFilters}>Clear filters</Button>} />
-            : <EmptyState icon="calendar" title="No appointments yet" message="Book the first appointment to get started."
+            : <EmptyState icon="calendar" title="No appointments yet" message="Book the first appointment to get started"
                 action={<Button icon="plus" onClick={() => setEditing({})}>New appointment</Button>} />}>
           {appointments && <DataTable columns={columns} rows={appointments} caption="Appointments" />}
         </AsyncView>

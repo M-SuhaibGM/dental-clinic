@@ -9,7 +9,7 @@ export const Loader = ({ label = 'Loading…' }) => (
 
 export const ErrorState = ({ error, onRetry }) => (
   <div className="state-box state-error" role="alert">
-    <div className="state-icon"><Icon name="alert" size={28} /></div>
+    <div className="state-icon"><Icon name="alert" size={20} /></div>
     <h3>Something went wrong</h3>
     <p>{error?.message || 'Could not load data.'}</p>
     {onRetry && <Button variant="secondary" onClick={onRetry}>Try again</Button>}

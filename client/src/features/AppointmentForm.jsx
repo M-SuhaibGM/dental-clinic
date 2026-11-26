@@ -102,7 +102,7 @@ export default function AppointmentForm({ appointment, doctors, defaultDoctorId,
 
         <fieldset>
           <legend>Booking</legend>
-          <Select label="Doctor" required placeholder="Select a doctor…" options={doctorOptions} error={errors.doctor_id}
+          <Select label="Doctor" required placeholder="Select a doctor" options={doctorOptions} error={errors.doctor_id}
             hint={selected && `Available ${selected.available_days.join(', ')} · ${formatHours(selected.start_time, selected.end_time)}`}
             {...bind('doctor_id')} />
           <div className="form-row form-row-3">

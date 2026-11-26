@@ -56,7 +56,7 @@ export default function Doctors() {
         <span className="days" aria-label={`Works ${d.available_days.join(', ')}`}>
           {DAYS.map((x) => <i key={x} className={d.available_days.includes(x) ? 'on' : ''} title={x}>{x[0]}</i>)}
         </span>
-        <span className="muted">{formatHours(d.start_time, d.end_time)}</span></div>) },
+        <span className="muted mono">{formatHours(d.start_time, d.end_time)}</span></div>) },
     { key: 'upcoming_count', label: 'Upcoming', className: 'num' },
     { key: 'is_active', label: 'Status', render: (d) => <ActiveBadge active={d.is_active} /> },
     { key: 'actions', label: 'Actions', className: 'actions', render: (d) => (
@@ -76,8 +76,8 @@ export default function Doctors() {
       <div className={`card ${loading && doctors ? 'refreshing' : ''}`}>
         <div className="toolbar">
           <label className="search">
-            <Icon name="search" size={18} />
-            <input type="search" placeholder="Search name, specialization, email…" value={search}
+            <Icon name="search" />
+            <input type="search" placeholder="Search" value={search}
               onChange={(e) => setSearch(e.target.value)} aria-label="Search doctors" />
           </label>
           <select value={active} onChange={(e) => setActive(e.target.value)} aria-label="Filter by status">
@@ -89,9 +89,9 @@ export default function Doctors() {
 
         <AsyncView loading={loading && !doctors} error={error} onRetry={reload} isEmpty={doctors?.length === 0}
           empty={filtered
-            ? <EmptyState title="No matching doctors" message="Try a different search or filter."
+            ? <EmptyState title="No matching doctors" message="Try a different search or filter"
                 action={<Button variant="secondary" onClick={() => { setSearch(''); setActive(''); }}>Clear filters</Button>} />
-            : <EmptyState icon="doctor" title="No doctors yet" message="Add your first doctor to start booking appointments."
+            : <EmptyState icon="doctor" title="No doctors yet" message="Add your first doctor to start booking appointments"
                 action={<Button icon="plus" onClick={() => setEditing({})}>Add doctor</Button>} />}>
           {doctors && <DataTable columns={columns} rows={doctors} caption="Doctors" onRowClick={(d) => navigate(`/doctors/${d.id}`)} />}
         </AsyncView>

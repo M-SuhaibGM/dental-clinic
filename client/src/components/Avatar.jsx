@@ -1,9 +1,6 @@
 import { initials } from '../utils/format';
 
-const TONES = ['teal', 'blue', 'violet', 'amber', 'rose', 'slate'];
-
-/** Round initials badge; the colour is derived from the name so the same person always looks the same. */
+/** Round initials badge in one quiet tone, so colour in the app is reserved for status and the accent. */
 export default function Avatar({ name, size = 'md' }) {
-  const tone = TONES[[...name].reduce((n, c) => n + c.charCodeAt(0), 0) % TONES.length];
-  return <span className={`avatar avatar-${size} avatar-${tone}`} aria-hidden="true">{initials(name)}</span>;
+  return <span className={`avatar avatar-${size}`} aria-hidden="true">{initials(name)}</span>;
 }

@@ -18,7 +18,7 @@ import { DAYS, formatDate, formatHours, formatTime } from '../utils/format';
 
 const columns = [
   { key: 'date', label: 'Date', render: (a) => (
-    <div className="stack"><strong>{formatDate(a.appointment_date)}</strong><span className="muted">{formatTime(a.start_time)} · {a.duration_minutes} min</span></div>) },
+    <div className="stack"><strong>{formatDate(a.appointment_date)}</strong><span className="muted mono">{formatTime(a.start_time)} · {a.duration_minutes} min</span></div>) },
   { key: 'patient_name', label: 'Patient' },
   { key: 'reason', label: 'Reason', className: 'truncate' },
   { key: 'status', label: 'Status', render: (a) => <StatusBadge status={a.status} /> },
@@ -52,7 +52,8 @@ export default function DoctorDetail() {
       <AsyncView loading={loading && !doctor} error={error} onRetry={reload}>
         {doctor && (
           <>
-            <PageHeader title={<span className="doctor-hero"><Avatar name={doctor.name} size="lg" />{doctor.name}</span>} subtitle={doctor.specialization}
+            <PageHeader title={<span className="doctor-hero"><Avatar name={doctor.name} size="lg" />
+                <span className="stack">{doctor.name}<span className="muted">{doctor.specialization}</span></span></span>}
               actions={<>
                 <Button variant="secondary" icon="edit" onClick={() => setModal('edit')}>Edit</Button>
                 <Button variant="danger" icon="trash" onClick={() => setModal('delete')}>Delete</Button>
@@ -66,7 +67,7 @@ export default function DoctorDetail() {
                   <dt>Status</dt><dd><ActiveBadge active={doctor.is_active} /></dd>
                   <dt>Email</dt><dd><a href={`mailto:${doctor.email}`} className="link">{doctor.email}</a></dd>
                   <dt>Phone</dt><dd><a href={`tel:${doctor.phone}`} className="link">{doctor.phone}</a></dd>
-                  <dt>Hours</dt><dd>{formatHours(doctor.start_time, doctor.end_time)}</dd>
+                  <dt>Hours</dt><dd className="mono">{formatHours(doctor.start_time, doctor.end_time)}</dd>
                 </dl>
                 <h3 className="subhead">Weekly availability</h3>
                 <div className="week">
@@ -80,7 +81,7 @@ export default function DoctorDetail() {
               <section className="card">
                 <div className="card-header">
                   <h2>Upcoming appointments</h2>
-                  <Link to={`/appointments?doctor_id=${doctor.id}`} className="link">All for this doctor →</Link>
+                  <Link to={`/appointments?doctor_id=${doctor.id}`} className="link">All for this doctor</Link>
                 </div>
                 {doctor.appointments.length
                   ? <DataTable columns={columns} rows={doctor.appointments} caption="Upcoming appointments"

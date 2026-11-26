@@ -29,11 +29,11 @@ export default function Layout() {
         <nav aria-label="Main">
           {NAV.map((n) => (
             <NavLink key={n.to} to={n.to} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-              <Icon name={n.icon} /> {n.label}
+              <Icon name={n.icon} />
+              {n.label}
             </NavLink>
           ))}
         </nav>
-        <p className="sidebar-foot">Clinic staff portal</p>
       </aside>
       {open && <div className="scrim" onClick={() => setOpen(false)} />}
 

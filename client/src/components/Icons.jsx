@@ -1,4 +1,4 @@
-// Small inline icon set (no icon library dependency). Stroke icons, 20px by default.
+// Small inline icon set (no icon library dependency). Stroke icons, 16px with a 1.5 stroke by default.
 const paths = {
   dashboard: 'M3 13h8V3H3zM13 21h8V11h-8zM3 21h8v-6H3zM13 3v6h8V3z',
   doctor: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1M17 16v4M15 18h4',
@@ -19,9 +19,9 @@ const paths = {
   mail: 'M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM22 6l-10 7L2 6',
 };
 
-export default function Icon({ name, size = 20, ...props }) {
+export default function Icon({ name, size = 16, ...props }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
       strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
       <path d={paths[name]} />
     </svg>

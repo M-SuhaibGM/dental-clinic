@@ -19,7 +19,7 @@ export function ToastProvider({ children }) {
       <div className="toast-stack" aria-live="polite">
         {toasts.map((t) => (
           <div key={t.id} className={`toast toast-${t.type}`} role="status">
-            <Icon name={t.type === 'success' ? 'check' : 'alert'} size={18} />
+            <Icon name={t.type === 'success' ? 'check' : 'alert'} />
             <span>{t.message}</span>
           </div>
         ))}
